@@ -17,7 +17,7 @@ import requests
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "output"
-VOICE = os.getenv("VOICE") or "en-US-AndrewNeural"  # Hindi example: hi-IN-MadhurNeural
+VOICE = os.getenv("VOICE") or "en-US-AndrewNeural"
 GEMINI_MODEL = os.getenv("GEMINI_MODEL") or "gemini-2.5-flash"
 W, H = 1080, 1920
 
@@ -57,7 +57,7 @@ def llm_script(t):
         r.raise_for_status()
         text = r.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
         return text if 40 <= len(text.split()) <= 220 else None
-    except Exception as e:  # fall back to the plain script
+    except Exception as e:
         print("LLM script failed, using fallback:", e)
         return None
 
@@ -100,7 +100,7 @@ def ts(sec):
 
 
 def build_srt(words, text, duration, srt_path, per_cue=3):
-    if not words:  # no timings from the voice engine: spread words evenly
+    if not words:
         toks = text.split()
         step = duration / max(len(toks), 1)
         words = [(i * step, (i + 1) * step, w) for i, w in enumerate(toks)]
@@ -108,7 +108,7 @@ def build_srt(words, text, duration, srt_path, per_cue=3):
     for i in range(0, len(words), per_cue):
         group = words[i:i + per_cue]
         cues.append([group[0][0], group[-1][1], " ".join(w[2] for w in group)])
-    for k in range(len(cues) - 1):  # no gaps between captions
+    for k in range(len(cues) - 1):
         cues[k][1] = cues[k + 1][0]
     cues[-1][1] = min(cues[-1][1] + 0.3, duration)
     lines = []
@@ -167,7 +167,7 @@ def render(audio_name, srt_name, bg_name, duration, out_name):
            "-t", f"{duration + 0.5:.2f}", "-vf", vf, "-map", "0:v", "-map", "1:a",
            "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-pix_fmt", "yuv420p",
            "-r", "30", "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", out_name]
-    subprocess.run(cmd, check=True, cwd=OUT)  # run inside output/ so file names stay simple
+    subprocess.run(cmd, check=True, cwd=OUT)
 
 
 # ---------- main ----------
@@ -202,53 +202,8 @@ def main():
         from youtube_upload import upload
         upload(OUT / "video.mp4", topic["title"] + " #Shorts", description, topic["tags"])
     else:
-        print("Upload skipped (UPLOAD_TO_YOUTUBE is not 'true'). Review the video artifact first.")
+        print("Upload skipped. Review the video first.")
 
 
 if __name__ == "__main__":
     main()
-
-File 2: name it .github/workflows/daily.yml
-
-yaml
-name: daily-lifting-short
-
-on:
-  schedule:
-    - cron: "30 3 * * *"   # every day at 03:30 UTC (9:00 AM India time)
-  workflow_dispatch:        # lets you press "Run workflow" by hand
-
-jobs:
-  make-video:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install ffmpeg and fonts
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu-core
-
-      - name: Install Python packages
-        run: pip install -r requirements.txt
-
-      - name: Make the video
-        run: python src/pipeline.py
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
-          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
-          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
-          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
-          UPLOAD_TO_YOUTUBE: ${{ vars.UPLOAD_TO_YOUTUBE }}
-          VOICE: ${{ vars.VOICE }}
-
-      - name: Keep the video so you can download and review it
-        uses: actions/upload-artifact@v4
-        with:
-          name: video
-          path: output/
-          retention-days: 7
