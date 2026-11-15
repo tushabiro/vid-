@@ -1,0 +1,38 @@
+[
+  {
+    "title": "How many sets per week build muscle?",
+    "hook": "How many sets do you actually need to build muscle?",
+    "points": [
+      "A 2017 meta-analysis by Schoenfeld and colleagues found that people doing ten or more hard sets per muscle each week gained more muscle than people doing fewer than five.",
+      "The returns shrink as volume climbs, so more is not always better.",
+      "A smart plan: start with a moderate number of sets, and only add more when your progress stalls."
+    ],
+    "sources": ["Schoenfeld BJ, Ogborn D, Krieger JW. Dose-response relationship between weekly resistance training volume and increases in muscle mass. J Sports Sci, 2017."],
+    "tags": ["lifting", "hypertrophy", "sciencebasedlifting", "gym", "muscle"],
+    "bg_query": "gym weightlifting"
+  },
+  {
+    "title": "Train a muscle once or twice a week?",
+    "hook": "Do you need to train each muscle twice a week?",
+    "points": [
+      "A 2019 review by Schoenfeld and colleagues concluded that when weekly sets are matched, training frequency does not clearly change muscle growth.",
+      "That means the best schedule is the one you can actually stick to.",
+      "If you like full body days, great. If you like splits, also great. Just hit your weekly sets."
+    ],
+    "sources": ["Schoenfeld BJ, Grgic J, Krieger J. How many times per week should a muscle be trained to maximize muscle hypertrophy? A systematic review and meta-analysis of studies examining the effects of resistance training frequency. J Sports Sci, 2019."],
+    "tags": ["lifting", "training frequency", "sciencebasedlifting", "gym", "workoutsplit"],
+    "bg_query": "man lifting dumbbells gym"
+  },
+  {
+    "title": "How much protein do you really need?",
+    "hook": "How much protein do you really need to build muscle?",
+    "points": [
+      "A large 2018 meta-analysis by Morton and colleagues found that extra protein helped muscle gain up to about one point six grams per kilogram of body weight per day.",
+      "Beyond that, the benefit leveled off for most people.",
+      "If you have a kidney condition or any medical issue, check with your doctor before raising your protein."
+    ],
+    "sources": ["Morton RW et al. A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults. Br J Sports Med, 2018."],
+    "tags": ["protein", "nutrition", "sciencebasedlifting", "gym", "muscle"],
+    "bg_query": "healthy food protein meal prep"
+  }
+]
